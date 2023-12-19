@@ -21,10 +21,10 @@ app.use(sessions({
 app.use(cookieParser());
 
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root", // my username
-    password: "tutari@19", // my password
-    database: "myform"
+    host: "hostname",
+    user: "myusername", // my username
+    password: "mypassword", // my password
+    database: "dbname"
 });
 
 app.get('/', (req, res) => {
@@ -36,11 +36,6 @@ app.post('/register', encodeUrl, (req, res) => {
     var lastName = req.body.lastName;
     var userName = req.body.userName;
     var password = req.body.password;
-
-  //  con.connect(function(err) {
-    //    if (err){
-    //        console.log(err);
-    //    };
         // checking user already registered or no
         con.query(`SELECT * FROM ac WHERE username = '${userName}' AND password  = '${password}'`, function(err, result){
             if(err){
@@ -72,13 +67,8 @@ app.post('/register', encodeUrl, (req, res) => {
                         userPage();
                     };
                 });
-
         }
-
         });
-  //  });
-
-
 });
 
 app.get("/login", (req, res)=>{
@@ -88,11 +78,6 @@ app.get("/login", (req, res)=>{
 app.post("/dashboard", encodeUrl, (req, res)=>{
     var userName = req.body.userName;
     var password = req.body.password;
-
-   // con.connect(function(err) {
-      //  if(err){
-       //     console.log(err);
-     //   }; 
         con.query(`SELECT * FROM ac WHERE username = '${userName}' AND password = '${password}'`, function (err, result) {
           if(err){
             console.log(err);
@@ -106,8 +91,7 @@ app.post("/dashboard", encodeUrl, (req, res)=>{
                 username: userName,
                 password: password 
             };
-            res.render('log.ejs',{firstname:req.session.user.firstname,lastname:req.session.user.lastname})
-     
+            res.render('log.ejs',{firstname:req.session.user.firstname,lastname:req.session.user.lastname})  
         }
 
         if(Object.keys(result).length > 0){
@@ -117,7 +101,6 @@ app.post("/dashboard", encodeUrl, (req, res)=>{
         }
 
         });
-   // });
 });
 
 app.listen(4000, ()=>{
